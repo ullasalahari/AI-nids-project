@@ -50,7 +50,7 @@ def load_simulated_data():
 
 
 def load_real_data():
-    df = pd.read_csv("Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
+    df = pd.read_csv("Friday-WorkingHours-Afternoon-DDos_SAMPLE.csv")
     df = df[[
         "Destination Port",
         "Flow Duration",
