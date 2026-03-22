@@ -107,7 +107,7 @@ c1, c2, c3, c4 = st.columns(4)
 dur = c1.number_input("Flow_Duration", 0, 10000, 1000)
 pkts = c2.number_input("Total_Packets", 0, 200, 20)
 bpkts = c3.number_input("Backward_Packets", 0, 200, 10)
-plen = c4.number_input("Packet_Length Mean", 0, 1500, 300)
+plen = c4.number_input("Packet_Length_Mean", 0, 1500, 300)
 
 if st.button("Analyze Traffic"):
     if "model" not in st.session_state:
