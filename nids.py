@@ -1,6 +1,6 @@
 # ================================
 # AI-Based Network Intrusion Detection System
-# FINAL CODE FOR YOUR DATASET
+# FINAL WORKING CODE
 # ================================
 
 import streamlit as st
@@ -24,11 +24,11 @@ This system uses **Machine Learning (Random Forest Algorithm)** to detect malici
 - 1 → Malicious (DDoS)
 """)
 
-# ---------------- LOAD YOUR DATASET ----------------
+# ---------------- LOAD DATA ----------------
 def load_real_data():
     df = pd.read_csv("Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
 
-    # Rename columns properly
+    # Rename columns
     df.columns = [
         "Flow_Duration",
         "Total_Packets",
@@ -37,8 +37,8 @@ def load_real_data():
         "Label"
     ]
 
-    # Convert labels to numbers
-    df["Label"] = df["Label"].apply(lambda x: 0 if x.strip() == "Benign" else 1)
+    # Convert labels
+    df["Label"] = df["Label"].apply(lambda x: 0 if str(x).strip() == "Benign" else 1)
 
     df.dropna(inplace=True)
     return df
@@ -104,10 +104,10 @@ st.subheader("Live Traffic Analyzer")
 
 c1, c2, c3, c4 = st.columns(4)
 
-dur = c1.number_input("Flow_Duration", 0, 10000, 1000)
-pkts = c2.number_input("Total_Packets", 0, 200, 20)
-bpkts = c3.number_input("Backward_Packets", 0, 200, 10)
-plen = c4.number_input("Packet_Length_Mean", 0, 1500, 300)
+dur = c1.number_input("Flow Duration", 0, 10000, 1000)
+pkts = c2.number_input("Total Packets", 0, 200, 20)
+bpkts = c3.number_input("Backward Packets", 0, 200, 10)
+plen = c4.number_input("Packet Length Mean", 0, 1500, 300)
 
 if st.button("Analyze Traffic"):
     if "model" not in st.session_state:
