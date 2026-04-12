@@ -1,22 +1,26 @@
 # ================================
 # AI-Based Network Intrusion Detection System
-# FINAL CLEAN WORKING CODE
+# FINAL DASHBOARD CODE (NO ERRORS)
 # ================================
 
 import streamlit as st
 import pandas as pd
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')   # FIX for recursion error
+import matplotlib.pyplot as plt
+
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-import matplotlib.pyplot as plt
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(page_title="AI NIDS Dashboard", layout="wide")
 
-st.title("AI-Powered Network Intrusion Detection System")
+st.title("🚀 AI-Powered Network Intrusion Detection System")
+
 st.markdown("""
-This system uses **Machine Learning (Random Forest Algorithm)** to detect malicious traffic.
+This system uses **Machine Learning (Random Forest)** to detect malicious traffic.
 
 **Classes:**
 - 0 → Benign  
@@ -24,7 +28,7 @@ This system uses **Machine Learning (Random Forest Algorithm)** to detect malici
 """)
 
 # ---------------- LOAD DATA ----------------
-def load_real_data():
+def load_data():
     df = pd.read_csv("Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
 
     df.columns = [
@@ -41,17 +45,31 @@ def load_real_data():
     return df
 
 # ---------------- SIDEBAR ----------------
-st.sidebar.header("Settings")
+st.sidebar.header("⚙ Settings")
 train_size = st.sidebar.slider("Training Data (%)", 60, 90, 80)
 trees = st.sidebar.slider("Random Forest Trees", 50, 200, 100)
 
 # ---------------- LOAD DATA ----------------
 try:
-    df = load_real_data()
+    df = load_data()
     st.success("Dataset loaded successfully ✅")
 except Exception as e:
     st.error(f"Error loading dataset: {e}")
     st.stop()
+
+# ---------------- DATA PREVIEW ----------------
+st.subheader("📊 Dataset Overview")
+st.write(df.head())
+
+# ---------------- CLASS DISTRIBUTION CHART ----------------
+st.subheader("📈 Traffic Distribution")
+
+fig1 = plt.figure()
+df["Label"].value_counts().plot(kind="bar")
+plt.xticks([0,1], ["Benign", "Malicious"])
+plt.title("Traffic Distribution")
+st.pyplot(fig1)
+plt.close(fig1)
 
 # ---------------- PREPROCESS ----------------
 X = df.drop("Label", axis=1)
@@ -63,7 +81,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 # ---------------- TRAIN MODEL ----------------
 st.divider()
-st.subheader("Model Training")
+st.subheader("🧠 Model Training")
 
 if st.button("Train Model"):
     model = RandomForestClassifier(n_estimators=trees, random_state=42)
@@ -73,7 +91,7 @@ if st.button("Train Model"):
 
 # ---------------- EVALUATION ----------------
 st.divider()
-st.subheader("Model Evaluation")
+st.subheader("📊 Model Evaluation")
 
 if "model" in st.session_state:
     model = st.session_state["model"]
@@ -85,28 +103,29 @@ if "model" in st.session_state:
     st.text("Classification Report")
     st.text(classification_report(y_test, y_pred))
 
-    # FIXED CONFUSION MATRIX
+    # SAFE CONFUSION MATRIX
     cm = confusion_matrix(y_test, y_pred)
 
-    fig, ax = plt.subplots()
-    ax.imshow(cm)
+    fig2 = plt.figure()
+    plt.imshow(cm)
 
     for i in range(len(cm)):
         for j in range(len(cm[0])):
-            ax.text(j, i, cm[i][j], ha="center", va="center")
+            plt.text(j, i, cm[i][j], ha="center", va="center")
 
-    ax.set_xlabel("Predicted")
-    ax.set_ylabel("Actual")
-    ax.set_title("Confusion Matrix")
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.title("Confusion Matrix")
 
-    st.pyplot(fig)
+    st.pyplot(fig2)
+    plt.close(fig2)
 
 else:
     st.warning("Please train the model first.")
 
 # ---------------- LIVE ANALYZER ----------------
 st.divider()
-st.subheader("Live Traffic Analyzer")
+st.subheader("🔍 Live Traffic Analyzer")
 
 c1, c2, c3, c4 = st.columns(4)
 
