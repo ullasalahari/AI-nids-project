@@ -1,7 +1,6 @@
-# ================================
+
 # AI-Based Network Intrusion Detection System
 # FINAL WORKING CODE
-# ================================
 
 import streamlit as st
 import pandas as pd
@@ -12,7 +11,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, classification_rep
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# ---------------- PAGE CONFIG ----------------
+# PAGE CONFIG 
 st.set_page_config(page_title="AI NIDS Dashboard", layout="wide")
 
 st.title("AI-Powered Network Intrusion Detection System")
@@ -24,7 +23,7 @@ This system uses **Machine Learning (Random Forest Algorithm)** to detect malici
 - 1 → Malicious (DDoS)
 """)
 
-# ---------------- LOAD DATA ----------------
+# LOAD DATA
 def load_real_data():
     df = pd.read_csv("Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
 
@@ -43,12 +42,12 @@ def load_real_data():
     df.dropna(inplace=True)
     return df
 
-# ---------------- SIDEBAR ----------------
+#  SIDEBAR 
 st.sidebar.header("Settings")
 train_size = st.sidebar.slider("Training Data (%)", 60, 90, 80)
 trees = st.sidebar.slider("Random Forest Trees", 50, 200, 100)
 
-# ---------------- LOAD DATA ----------------
+#  LOAD DATA 
 try:
     df = load_real_data()
     st.success("Dataset loaded successfully ✅")
@@ -56,7 +55,7 @@ except Exception as e:
     st.error(f"Error loading dataset: {e}")
     st.stop()
 
-# ---------------- PREPROCESS ----------------
+#  PREPROCESS 
 X = df.drop("Label", axis=1)
 y = df["Label"]
 
@@ -64,7 +63,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=(100 - train_size) / 100, random_state=42
 )
 
-# ---------------- TRAIN MODEL ----------------
+#  TRAIN MODEL -
 st.divider()
 st.subheader("Model Training")
 
@@ -75,7 +74,7 @@ if st.button("Train Model"):
         st.session_state["model"] = model
         st.success("Model trained successfully! 🎉")
 
-# ---------------- EVALUATION ----------------
+#  EVALUATION 
 st.divider()
 st.subheader("Model Evaluation")
 
@@ -98,7 +97,7 @@ if "model" in st.session_state:
 else:
     st.warning("Please train the model first.")
 
-# ---------------- LIVE ANALYZER ----------------
+#  LIVE ANALYZER 
 st.divider()
 st.subheader("Live Traffic Analyzer")
 
