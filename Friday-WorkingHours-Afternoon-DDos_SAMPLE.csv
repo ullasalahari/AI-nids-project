@@ -18,4 +18,4 @@ Flow_Duration,Total_Packets,Total_Backward_Packets,Packet_Length_Mean,Label
 1000,11,5,210,Benign
 2800,78,50,780,DDoS
 950,13,6,190,Benign
-3300,95,75,920,DDoSs
+3300,95,75,920,DDoS
